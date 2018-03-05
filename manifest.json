@@ -1,11 +1,12 @@
 {
     "name": "UpbitPremiumBittrex",
-    "description": "UpbitPremiumBittrex",
+    "description": "Chrome extension that lets you see the premium right from within the upbit site!",
     "version": "1.0",
     "permissions": [
         "activeTab",
         "tabs",
-        "storage"
+        "storage",
+        "<all_urls>"
     ],
     "content_scripts": [
         {
@@ -18,10 +19,10 @@
         "scripts": ["background.js"] 
     },
     "browser_action": {
-        "default_icon": {                    // optional
-            "16": "images/icon16.png",           // optional
-            "24": "images/icon24.png",           // optional
-            "32": "images/icon32.png"            // optional
+        "default_icon": {
+            "16": "images/icon16.png",
+            "24": "images/icon24.png",
+            "32": "images/icon32.png"
           },
         "default_title": "Upbit Premium(Bittrex)"
     },
