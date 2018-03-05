@@ -27,7 +27,7 @@ function init() {
 function startService() {
     chrome.storage.local.get({'enable' : true}, function(data) {
         if(data.enable) {
-            console.log('활성화되어있음');
+            //console.log('활성화되어있음');
             getExchangeRate(function(exchangeRate) {
                 //환율을 가져왔으니 그 값가지고 계속 돌려
                 refreshIntervalId = setInterval(function() {
@@ -40,10 +40,10 @@ function startService() {
             });
         }
         else {
-            console.log('활성화안되어있음');
+            //console.log('활성화안되어있음');
         }
     });
-    console.log('---startService---');
+    //console.log('---startService---');
 }
 
 function stopService() {
@@ -51,7 +51,7 @@ function stopService() {
     //반복 종료
     clearInterval(refreshIntervalId);
     
-    console.log('---stopService---');
+    //console.log('---stopService---');
 }
 
 //html 원상태로 돌려놓기
@@ -75,13 +75,19 @@ function htmlReset(exchangeRate, oneBtcprice) {
 
 //html에 업프 텍스트 끼워넣자
 function setModifiedPriceText(exchangeRate, oneBtcprice) {
+    //원화탭이 on이 아니면 건너뛴다
+    var elementsTab = document.querySelectorAll("#root > div > div > div.mainB > section.ty02 > article:nth-child(2) > span.tabB > ul > li:nth-child(1) > a");
+    var tabState = elementsTab[0].getAttribute("class");
+    
+    if(tabState != 'on') {
+        return;
+    }
+    
     var elementsTr = document.querySelectorAll("#root > div > div > div.mainB > section.ty02 > article:nth-child(2) > span.tabB > div > div > div > div:nth-child(1) > table > tbody > tr");
     
     var arrXhr = [];
     for(var i = 0; i < elementsTr.length; i++) {
         var element = elementsTr[i];
-        //var elementPriceStrong = element.querySelector("td.price strong");
-        //var elementPrice = element.querySelector("td.price");
         var currencyKor = element.querySelector("td.tit");
         var currencyEng = element.querySelector("td.tit em").textContent.split("/")[0];//코인 영문명만 뽑기
         var upbitPriceKrw = parseFloat(element.querySelector("td.price strong").textContent.replace(/,/g, ''));
@@ -94,7 +100,7 @@ function setModifiedPriceText(exchangeRate, oneBtcprice) {
 
                     //console.log('usdtPrice: '+bittrexPrice+'/ price: '+upbitPriceKrw+'/ koPremium:'+premium);
                     var priceRawInnerHtml = currencyKor.innerHTML;
-                    currencyKor.innerHTML = priceRawInnerHtml.substring(0, priceRawInnerHtml.lastIndexOf('</em>')+5) + ' ('+premium+'%)';
+                    currencyKor.innerHTML = priceRawInnerHtml.substring(0, priceRawInnerHtml.lastIndexOf('</em>')+5) + ' <font color="green">P '+premium+'%</font>';
                 }
                 else {
                     callback('-');
